@@ -163,9 +163,7 @@ static bool SelectClass(EvalContext *ctx, const Rlist *list, const Promise *pp)
     char splay[CF_MAXVARSIZE];
     snprintf(splay, CF_MAXVARSIZE, "%s+%s+%ju",
              VFQNAME, VIPADDRESS, (uintmax_t)getuid());
-    double hash = (double) StringHash(splay, 0, CF_HASHTABLESIZE);
-    assert(hash < CF_HASHTABLESIZE);
-    int n = (int) (count * hash / (double) CF_HASHTABLESIZE);
+    int n = (int) (MurmurHash3_3(splay, 0) % count);
     assert(n < count);
 
     while (n > 0 && list->next != NULL)

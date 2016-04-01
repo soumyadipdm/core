@@ -29,6 +29,7 @@
 #include <compiler.h>
 #include <sequence.h>
 #include <pcre_include.h>
+#include <stdint.h>
 
 
 typedef struct
@@ -39,6 +40,8 @@ typedef struct
 
 unsigned int StringHash        (const char *str, unsigned int seed, unsigned int max);
 unsigned int StringHash_untyped(const void *str, unsigned int seed, unsigned int max);
+
+uint32_t MurmurHash3_32(const char *str, uint32_t seed);
 
 char ToLower(char ch);
 char ToUpper(char ch);

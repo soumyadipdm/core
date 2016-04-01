@@ -163,7 +163,7 @@ static bool SelectClass(EvalContext *ctx, const Rlist *list, const Promise *pp)
     char splay[CF_MAXVARSIZE];
     snprintf(splay, CF_MAXVARSIZE, "%s+%s+%ju",
              VFQNAME, VIPADDRESS, (uintmax_t)getuid());
-    int n = (int) (MurmurHash3_3(splay, 0) % count);
+    int n = (int) (MurmurHash3_32(splay, 0) % count);
     assert(n < count);
 
     while (n > 0 && list->next != NULL)

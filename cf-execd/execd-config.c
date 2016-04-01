@@ -33,7 +33,7 @@ static double GetSplay(void)
 {
     char splay[CF_BUFSIZE];
     snprintf(splay, CF_BUFSIZE, "%s+%s+%ju", VFQNAME, VIPADDRESS, (uintmax_t)getuid());
-    return ((double) StringHash(splay, 0, CF_HASHTABLESIZE)) / CF_HASHTABLESIZE;
+    return (double) MurmurHash3_32(splay, 0);
 }
 
 ExecdConfig *ExecdConfigNew(const EvalContext *ctx, const Policy *policy)
@@ -92,7 +92,7 @@ ExecdConfig *ExecdConfigNew(const EvalContext *ctx, const Policy *policy)
             else if (strcmp(cp->lval, CFEX_CONTROLBODY[EXEC_CONTROL_SPLAYTIME].lval) == 0)
             {
                 int time = IntFromString(value);
-                execd_config->splay_time = (int) (time * SECONDS_PER_MINUTE * GetSplay());
+                execd_config->splay_time = (int) (GetSplay() % (time * SECONDS_PER_MINUTE));
             }
             else if (strcmp(cp->lval, CFEX_CONTROLBODY[EXEC_CONTROL_SCHEDULE].lval) == 0)
             {

@@ -29,11 +29,11 @@
 #include <conversion.h>
 #include <string_lib.h>
 
-static double GetSplay(void)
+static unsigned int GetSplay(void)
 {
     char splay[CF_BUFSIZE];
     snprintf(splay, CF_BUFSIZE, "%s+%s+%ju", VFQNAME, VIPADDRESS, (uintmax_t)getuid());
-    return (double)MurmurHash3_32(splay, 0);
+    return (unsigned int)MurmurHash3_32(splay, 0);
 }
 
 ExecdConfig *ExecdConfigNew(const EvalContext *ctx, const Policy *policy)
@@ -91,8 +91,8 @@ ExecdConfig *ExecdConfigNew(const EvalContext *ctx, const Policy *policy)
             }
             else if (strcmp(cp->lval, CFEX_CONTROLBODY[EXEC_CONTROL_SPLAYTIME].lval) == 0)
             {
-                int time = IntFromString(value);
-                execd_config->splay_time = (int) (GetSplay() % (double)(time * SECONDS_PER_MINUTE));
+                unsigned int time = (unsigned int)IntFromString(value);
+                execd_config->splay_time = (int) (GetSplay() % (time * SECONDS_PER_MINUTE));
             }
             else if (strcmp(cp->lval, CFEX_CONTROLBODY[EXEC_CONTROL_SCHEDULE].lval) == 0)
             {
